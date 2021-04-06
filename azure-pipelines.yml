@@ -4,22 +4,18 @@ trigger:
 pool:
   vmImage: 'ubuntu-18.04'
   demands:
-  - npm
-  
- variables:
-  buildConfiguration: 'Release'
-  wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
-  dotnetSdkVersion: '3.1.300'
+    - npm
 
 variables:
   buildConfiguration: 'Release'
+  wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
+  dotnetSdkVersion: '3.1.300'
 
 steps:
 - task: UseDotNet@2
   displayName: 'Use .NET Core SDK $(dotnetSdkVersion)'
   inputs:
     version: '$(dotnetSdkVersion)'
-    version: 3.1.300
 
 - task: Npm@1
   displayName: 'Run npm install'
@@ -37,18 +33,18 @@ steps:
   workingDirectory: $(wwwrootDir)
 
 - task: DotNetCoreCLI@2
-  displayName: 'Build the project - $(buildConfiguration)'
+  displayName: 'Restore project dependencies'
   inputs:
     command: 'restore'
     projects: '**/*.csproj'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Build the project - Release'
+  displayName: 'Build the project - $(buildConfiguration)'
   inputs:
     command: 'build'
     arguments: '--no-restore --configuration $(buildConfiguration)'
     projects: '**/*.csproj'
-    
+
 - task: DotNetCoreCLI@2
   displayName: 'Publish the project - $(buildConfiguration)'
   inputs:
